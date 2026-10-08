@@ -14,6 +14,10 @@
   .logo span{font-weight:400;color:var(--muted)}
   .nav{display:flex;gap:6px}
   .wrap{max-width:760px;margin:0 auto;padding:12px 16px 60px}
+  .splash{min-height:100vh;display:grid;place-items:center;padding:24px 16px;cursor:pointer}
+  .mark{text-align:center}
+  .mark h1{font-size:44px}
+  .mark .kdef{margin:8px 0 26px}
   .narrow{max-width:560px;margin:0 auto}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:12px}
   h1{font-size:30px;margin:0;letter-spacing:-.01em}
@@ -125,20 +129,23 @@
 </div>
 
 <!-- 1. 첫 화면 -->
-<main class="wrap" id="v-home" hidden>
-  <div class="narrow" style="padding-top:40px">
+<main class="splash" id="v-home" hidden>
+  <div class="mark">
     <h1>Keepers <span>for AI</span></h1>
     <p class="kdef"><b>keeper</b> 사진가들이 여러 컷 가운데 쓸 만한 한 컷을 건졌을 때 부르는 말</p>
-    <p class="lead"><b>AI 그림 서비스에 낸 돈과 시간이 제값을 하는지 알려 드립니다.</b> 이 앱은 그림을 만들지 않습니다. 다른 AI로 그림이나 영상을 만들 때, 결과가 나올 때마다 쓸 만한지만 눌러 주세요.</p>
-    <ol class="steps"><li>어떤 AI로 만드는지 고릅니다.</li><li>결과가 나올 때마다 "못 쓰겠다" 또는 "쓸 만하다"를 누릅니다.</li><li>작업이 끝나면 결과를 봅니다. 든 돈, 걸린 시간, 못 쓴 이유와 고치는 방향이 나옵니다.</li></ol>
-    <div class="cta"><button class="btn pri big" type="button" id="start">시작하기</button><button class="btn big" type="button" id="homeDemo">예시로 결과 보기</button></div>
-    <p class="note">기록은 이 브라우저에만 저장되고 어디로도 보내지 않습니다.</p>
+    <button class="btn pri big" type="button" id="start">시작하기</button>
   </div>
 </main>
 
 <!-- 2. 작업 화면 -->
 <main class="wrap" id="v-work" hidden>
   <div class="narrow">
+    <div class="row" style="margin-top:0"><span></span><button class="btn sm" type="button" id="helpBtn" aria-expanded="false">? 사용법</button></div>
+    <section class="card" id="help" hidden>
+      <p style="margin:0"><b>AI 그림 서비스에 낸 돈과 시간이 제값을 하는지 알려 드립니다.</b> 이 앱은 그림을 만들지 않습니다. 다른 AI로 그림이나 영상을 만들 때, 결과가 나올 때마다 쓸 만한지만 눌러 주세요.</p>
+      <ol class="steps"><li>어떤 AI로 만드는지 고릅니다.</li><li>결과가 나올 때마다 "못 쓰겠다" 또는 "쓸 만하다"를 누릅니다. 못 쓴 이유를 고르면 고치는 방향을 알려 드립니다.</li><li>작업이 끝나면 "작업 끝, 결과 보기"를 누릅니다. 든 돈, 걸린 시간, 못 쓴 이유가 나옵니다.</li></ol>
+      <div class="row"><span class="note" style="margin:0">기록은 이 브라우저에만 저장되고 어디로도 보내지 않습니다.</span><button class="btn" type="button" id="homeDemo">예시로 결과 보기</button></div>
+    </section>
     <section class="card" id="setup">
       <div class="setline" id="setClosed" hidden><div><small>지금 기록하는 서비스</small><b id="setText"></b></div><button class="btn sm" type="button" id="setEdit">바꾸기</button></div>
       <div id="setOpen">
@@ -290,7 +297,9 @@ function apply(v){ if(!['home','work','result'].includes(v)) v='home';
 window.addEventListener('hashchange',()=>apply(location.hash.slice(1)));
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 $('#logo').onclick=()=>go('home');
-$('#start').onclick=()=>go('work');
+$('#v-home').onclick=()=>go('work');
+$('#helpBtn').onclick=()=>{ const h=$('#help'), open=h.hidden; h.hidden=!open; $('#helpBtn').setAttribute('aria-expanded',String(open)); };
+$('#start').onclick=e=>{ e.stopPropagation(); go('work'); };
 $('#homeDemo').onclick=()=>{ enterDemo(); go('result'); };
 $('#toResult').onclick=()=>go('result');
 $('#cont').onclick=()=>go('work');
@@ -464,8 +473,9 @@ $('#clear').onclick=()=>{ const b=$('#clear');
 fillPlans();
 if(st.cur&&st.cur.sel){ sel.value=st.cur.sel; $('#custom').value=st.cur.custom||''; $('#custom').hidden=sel.value!=='__custom'; fillPlans(); loadPlan(); }
 setOpen(!toolName());
-const first=location.hash.slice(1)||(st.log.length?'work':'home');
-history.replaceState(null,'','#'+first); apply(first);
+/* 열 때마다 로고 화면부터 보여 준다 */
+if(!st.log.length){ $('#help').hidden=false; $('#helpBtn').setAttribute('aria-expanded','true'); } /* 처음 온 사람에게는 사용법을 펼쳐 둔다 */
+history.replaceState(null,'','#home'); apply('home');
 </script>
 </body>
 </html>
