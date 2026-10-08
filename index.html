@@ -89,6 +89,9 @@
   .demo{font-size:13px;background:#fff7e0;border:1px solid #f0dca0;border-radius:10px;padding:8px 12px;margin-bottom:10px}
   .keep{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.6}
   .sumout{width:100%;min-height:150px;margin-top:8px;font:inherit;font-size:12.5px;padding:10px;border:1px solid var(--line);border-radius:10px;resize:vertical}
+  .sumbox{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#fafaf8}
+  .sumhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:14px}
+  .sumbox pre{margin:0;white-space:pre-wrap;word-break:break-word;font:inherit;font-size:13px;line-height:1.7;color:var(--ink)}
   .ok-msg{font-size:13px;color:var(--ok);min-height:1.2em;margin:6px 0 0}
   @media (max-width:760px){.grid{grid-template-columns:1fr}}
 </style>
@@ -147,10 +150,14 @@
       <p class="q">이번 달 기록으로 낸 결론입니다.</p>
       <div id="verdict"></div>
       <div class="score" id="score"></div>
-      <div class="row"><button class="btn pri" id="copySum">결과 요약 복사</button><span><button class="btn" id="demo">예시 데이터로 보기</button> <button class="btn" id="clear">모두 지우기</button></span></div>
-      <p class="ok-msg" id="sumMsg" role="status"></p>
-      <textarea class="sumout" id="sumOut" readonly hidden aria-label="결과 요약"></textarea>
-      <p class="keep">기록은 이 브라우저에만 저장되고 어디로도 보내지 않습니다. 브라우저 기록(쿠키·사이트 데이터)을 지우면 함께 사라지니, 남겨 두고 싶으면 "결과 요약 복사"로 메모에 옮겨 두세요.</p>
+      <div class="row"><button class="btn pri" id="showSum" aria-expanded="false">결과 요약 보기</button><span><button class="btn" id="demo">예시 데이터로 보기</button> <button class="btn" id="clear">모두 지우기</button></span></div>
+      <div class="sumbox" id="sumBox" hidden>
+        <div class="sumhead"><b>결과 요약</b><button class="btn sm" type="button" id="copySum">복사</button></div>
+        <pre id="sumText"></pre>
+        <p class="ok-msg" id="sumMsg" role="status"></p>
+        <textarea class="sumout" id="sumOut" readonly hidden aria-label="결과 요약 직접 복사"></textarea>
+      </div>
+      <p class="keep">기록은 이 브라우저에만 저장되고 어디로도 보내지 않습니다. 브라우저 기록(쿠키·사이트 데이터)을 지우면 함께 사라지니, 남겨 두고 싶으면 "결과 요약 보기"에서 복사해 메모에 옮겨 두세요.</p>
     </section>
 
     <section class="card full">
@@ -241,7 +248,7 @@ function verdicts(rows){ const out=[], small=rows.filter(r=>r.s.n<MIN), okRows=r
     else if(!priced.length){ const rated=g.filter(r=>r.s.k).sort((a,b)=>a.s.n/a.s.k-b.s.n/b.s.k); if(rated.length>=2){ const a=rated[0], z=rated[rated.length-1]; said.add(a.t); said.add(z.t); compared=true; out.push([lead(),el('b',null,a.t),`는 평균 ${r1(a.s.n/a.s.k)}번 만에, `,el('b',null,z.t),`는 평균 ${r1(z.s.n/z.s.k)}번 만에 하나를 건집니다.`]); } } });
   okRows.filter(r=>!said.has(r.t)).forEach(r=>{ if(!r.s.k) out.push([lead(),el('b',null,r.t),`는 ${r.s.n}번 만들었지만 아직 건진 것이 없습니다.`]);
     else if(r.plan==='month'){ const {d,all}=dayInfo(); out.push([lead(),el('b',null,r.t),`는 이번 달 정액 ${won(r.cost)} 가운데 지난 ${d}일치(${all}일 중) ${won(r.fee)}으로 ${r.s.k}개를 건졌습니다. 결과물 하나에 `,el('b',null,won(r.per)),'입니다.']); }
-    else out.push([lead(),el('b',null,r.t),`는 ${r.s.n}번에 ${r.s.k}번 건졌습니다.`,r.per!=null?[' 결과물 하나에 ',el('b',null,won(r.per)),'입니다.']:` 평균 ${r1(r.s.n/r.s.k)}번 만에 하나입니다.`]); });
+    else out.push([lead(),el('b',null,r.t),`는 ${r.s.n}번에 ${r.s.k}번 건졌습니다.`,r.per!=null?[' 결과물 하나에 ',el('b',null,won(r.per)),'입니다.']:` 평균 ${r1(r.s.n/r.s.k)}번 만에 하나입니다.`,r.plan==='free'?' 무료(또는 요금 미입력)로 기록해 비용은 계산하지 않았습니다.':'']); });
   return {out,small,compared}; }
 function render(){
   const rows=getRows(), v=$('#verdict'); v.replaceChildren();
@@ -253,7 +260,9 @@ function render(){
   const sc=$('#score'); sc.replaceChildren();
   rows.sort((a,b)=>(a.per??1e12)-(b.per??1e12)).forEach(r=>sc.append(el('div',{class:'s'},el('div',{class:'n'},r.t,el('small',null,planLabel(r))),
     el('div',{class:'bar'},el('i',{style:`width:${Math.round(r.s.k/r.s.n*100)}%`})),
-    el('div',{class:'v'},`${r.s.n}번 만들어 ${r.s.k}개 건짐 · `,r.s.k?['평균 ',el('b',null,`${r1(r.s.n/r.s.k)}번`),' 만에 하나']:'아직 건진 것 없음',r.per!=null?[' · 하나에 ',el('b',null,won(r.per))]:null))));
+    el('div',{class:'v'},`${r.s.n}번 만들어 ${r.s.k}개 건짐 · `,r.s.k?['평균 ',el('b',null,`${r1(r.s.n/r.s.k)}번`),' 만에 하나']:'아직 건진 것 없음',r.per!=null?[' · 하나에 ',el('b',null,won(r.per))]:null),
+    el('div',{class:'v'},r.fee!=null?['이번 달 쓴 금액 ',el('b',null,won(r.fee)),r.plan==='month'?` (월 요금 중 ${dayInfo().d}일치)`:` (1회 ${won(r.cost)} × ${r.s.n}번)`]:'무료·요금 미입력이라 쓴 금액은 0원으로 봅니다. 유료라면 1번에서 요금제를 골라 주세요.'))));
+  if($('#showSum').getAttribute('aria-expanded')==='true') fillSum();
   const C=cuts(), list=$('#list'); list.replaceChildren();
   C.sort(sortBy==='easy'?(a,b)=>a.tries-b.tries||b.at-a.at:(a,b)=>b.at-a.at);
   const shown=C.filter(c=>c.p), bare=C.length-shown.length;
@@ -275,13 +284,17 @@ function summaryText(){ const rows=getRows(); if(!rows.length) return ''; const 
   const L=[`Keepers for AI · ${n.getFullYear()}년 ${m}월 기록 요약 (${m}월 ${n.getDate()}일까지)`+(inDemo()?' · 예시 데이터':'')];
   const vl=[...document.querySelectorAll('#verdict .vl, #verdict .cav, #verdict .vs')].map(p=>'- '+p.textContent);
   L.push('','[결론]',...(vl.length?vl:['- 아직 결론이 없습니다.']));
-  L.push('','[서비스별]',...rows.map(r=>`- ${r.t} (${planLabel(r)}): ${r.s.n}번 만들어 ${r.s.k}개 건짐`+(r.s.k?`, 평균 ${r1(r.s.n/r.s.k)}번 만에 하나`:'')+(r.per!=null?`, 결과물 하나에 ${won(r.per)}`:'')));
+  L.push('','[서비스별]',...rows.map(r=>`- ${r.t} (${planLabel(r)}): ${r.s.n}번 만들어 ${r.s.k}개 건짐`+(r.s.k?`, 평균 ${r1(r.s.n/r.s.k)}번 만에 하나`:'')+(r.per!=null?`, 결과물 하나에 ${won(r.per)}`:'')+(r.fee!=null?`, 이번 달 쓴 금액 ${won(r.fee)}`:', 쓴 금액 0원(무료·미입력)')));
   const C=cuts(), pr=C.filter(c=>c.p), cp=pr.reduce((a,c)=>a+(c.e.c||0),0);
   L.push('','[잘 먹힌 프롬프트]',`- 남긴 프롬프트 ${pr.length}개, 복사해서 다시 쓴 횟수 ${cp}번`);
   return L.join('\n'); }
-$('#copySum').onclick=async()=>{ const txt=summaryText(), m=$('#sumMsg'), o=$('#sumOut'); o.hidden=true;
-  if(!txt){ m.textContent='아직 요약할 기록이 없습니다.'; return; }
-  try{ await navigator.clipboard.writeText(txt); m.textContent='요약을 복사했습니다. 메모나 메신저에 붙여 넣으세요.'; }
+function fillSum(){ const txt=summaryText(); $('#sumText').textContent=txt||'아직 요약할 기록이 없습니다. 서비스를 고르고 결과마다 버튼을 눌러 보세요.'; $('#copySum').hidden=!txt; }
+function closeSum(){ $('#sumBox').hidden=true; $('#showSum').setAttribute('aria-expanded','false'); $('#showSum').textContent='결과 요약 보기'; }
+$('#showSum').onclick=()=>{ const open=$('#showSum').getAttribute('aria-expanded')==='true';
+  if(open){ closeSum(); return; }
+  $('#sumMsg').textContent=''; $('#sumOut').hidden=true; fillSum(); $('#sumBox').hidden=false; $('#showSum').setAttribute('aria-expanded','true'); $('#showSum').textContent='결과 요약 닫기'; };
+$('#copySum').onclick=async()=>{ const txt=summaryText(), m=$('#sumMsg'), o=$('#sumOut'); o.hidden=true; if(!txt) return;
+  try{ await navigator.clipboard.writeText(txt); m.textContent='복사했습니다. 메모나 메신저에 붙여 넣으세요.'; }
   catch(e){ o.value=txt; o.hidden=false; o.focus(); o.select(); m.textContent='자동 복사가 막혀 있습니다. 아래 글을 직접 복사해 주세요.'; } };
 // 예시 데이터: 내 기록을 건드리지 않고 보기만 한다
 function exitDemo(){ if(!inDemo()) return; st=real; real=null; $('#got').hidden=true; lastLen=-1; }
