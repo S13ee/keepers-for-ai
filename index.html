@@ -5,27 +5,41 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Keepers for AI</title>
 <style>
-  :root{--ink:#1f2328;--muted:#6b7280;--line:#e3e5e8;--bg:#f6f6f4;--card:#fff;--ok:#1f6f5c;--no:#8a8f98}
+  :root{--ink:#1f2328;--muted:#6b7280;--line:#e3e5e8;--bg:#f6f6f4;--card:#fff;--ok:#1f6f5c;--no:#8a8f98;--warn:#a13d2d}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.6}
-  .wrap{max-width:1000px;margin:0 auto;padding:20px 16px 60px}
-  header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
-  h1{font-size:22px;margin:0;letter-spacing:-.01em}
-  .forai{font-weight:400;color:var(--muted)}
-  .kdef{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
-  .kdef b{font-weight:600;font-style:italic;color:var(--ink);margin-right:6px}
-  .sketch{font-size:12px;color:var(--muted);border:1px dashed #c9ccd1;border-radius:999px;padding:1px 10px}
-  .intro{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin:12px 0 14px;font-size:14.5px}
-  .intro ol{margin:6px 0 0;padding-left:20px;color:var(--muted);font-size:13.5px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
-  h2{font-size:15px;margin:0 0 4px}
+  [hidden]{display:none!important}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:10px;max-width:760px;margin:0 auto;padding:14px 16px 0}
+  .logo{font:inherit;font-size:17px;font-weight:700;background:none;border:0;padding:0;cursor:pointer;color:var(--ink)}
+  .logo span{font-weight:400;color:var(--muted)}
+  .nav{display:flex;gap:6px}
+  .wrap{max-width:760px;margin:0 auto;padding:12px 16px 60px}
+  .narrow{max-width:560px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:12px}
+  h1{font-size:30px;margin:0;letter-spacing:-.01em}
+  h1 span{font-weight:400;color:var(--muted)}
+  h2{font-size:16px;margin:0 0 6px}
+  h3{font-size:14px;margin:0 0 6px}
+  .kdef{margin:4px 0 0;font-size:13px;color:var(--muted)}
+  .kdef b{font-style:italic;color:var(--ink);margin-right:6px}
   .q{font-size:13px;color:var(--muted);margin:0 0 10px}
+  .lead{font-size:15.5px;margin:14px 0 0}
+  .steps{margin:10px 0 0;padding-left:20px;color:var(--muted);font-size:14px}
+  .cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
   select,input{font:inherit;font-size:14.5px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;min-width:0}
   select{width:100%}
-  .btn{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 13px;cursor:pointer}
+  .btn{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 13px;cursor:pointer;color:var(--ink)}
   .btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
   .btn.sm{font-size:12.5px;padding:4px 10px}
+  .btn.big{font-size:15px;padding:11px 18px}
+  .row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:12px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+  .msg{font-size:13px;color:var(--warn);min-height:1.2em;margin:6px 0 0}
+  .ok-msg{font-size:13px;color:var(--ok);min-height:1.2em;margin:6px 0 0}
+  .note{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.6}
+  /* 설정 */
+  .setline{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .setline b{font-size:15px}
+  .setline small{display:block;color:var(--muted);font-size:12.5px}
   .plan{display:grid;gap:6px;margin-top:10px;font-size:14px}
   .plan label{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .plan input[type=number]{width:110px;padding:6px 10px}
@@ -37,16 +51,12 @@
   .prow select{flex:1}
   .prow .btn{white-space:nowrap}
   .pnote{font-size:11.5px;color:var(--muted);line-height:1.6;margin:2px 0 0}
-  .step{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+  /* 기록 */
   .tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-  .tab{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 14px;cursor:pointer}
+  .tab{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 14px;cursor:pointer;color:var(--ink)}
   .tab[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
-  .num{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0}
-  .stp{display:flex;align-items:center;gap:8px}
-  .stp button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:20px;cursor:pointer;line-height:1}
-  .stp input{width:64px;text-align:center;font-weight:700;font-size:17px;padding:7px 4px}
   .big{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .big button{font:inherit;border:0;border-radius:18px;padding:20px 10px;font-size:18px;font-weight:700;cursor:pointer;color:#fff}
+  .big button{font:inherit;border:0;border-radius:18px;padding:22px 10px;font-size:18px;font-weight:700;cursor:pointer;color:#fff}
   .big .no{background:var(--no)}.big .ok{background:var(--ok)}
   .big small{display:block;font-size:12.5px;font-weight:400;opacity:.92;margin-top:2px}
   .tally{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;min-height:34px;align-items:center}
@@ -54,128 +64,166 @@
   .mk.ok{background:var(--ok)}.mk.new{animation:pop .25s ease}
   @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
   .tally .ph{font-size:13px;color:var(--muted)}
-  .sum{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-  .sum span{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:3px 12px}
-  .sum b{font-size:15px;margin-left:4px}
-  .got{margin-top:12px;border:1px solid #cfe1da;background:#f3f8f6;border-radius:12px;padding:12px 14px;font-size:13.5px}
-  .got .f{display:flex;gap:6px;margin-top:8px}
-  .got .f input{flex:1;font-size:13.5px;padding:7px 10px}
-  .got small{display:block;color:var(--muted);font-size:12.5px;margin-top:6px}
-  .row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:12px;font-size:13px;color:var(--muted);flex-wrap:wrap}
-  .msg{font-size:13px;color:#a13d2d;min-height:1.2em;margin:6px 0 0}
-  .verdict{border-radius:14px;background:var(--ink);color:#fff;padding:14px 16px;margin-bottom:12px}
+  .live{margin-top:10px;font-size:13.5px;color:var(--muted)}
+  .live b{color:var(--ink)}
+  .box{margin-top:12px;border-radius:12px;padding:12px 14px;font-size:13.5px}
+  .box.got{border:1px solid #cfe1da;background:#f3f8f6}
+  .box.why{border:1px solid #e6dcd3;background:#faf6f2}
+  .box .f{display:flex;gap:6px;margin-top:8px}
+  .box .f input{flex:1;font-size:13.5px;padding:7px 10px}
+  .box small{display:block;color:var(--muted);font-size:12.5px;margin-top:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .chip{font:inherit;font-size:13px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;cursor:pointer;color:var(--ink)}
+  .chip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .fix{margin-top:10px;padding-top:10px;border-top:1px solid #eadfd5}
+  .fix p{margin:0}
+  .num{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0}
+  .stp{display:flex;align-items:center;gap:8px}
+  .stp button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:20px;cursor:pointer;line-height:1}
+  .stp input{width:64px;text-align:center;font-weight:700;font-size:17px;padding:7px 4px}
+  .gores{margin-top:14px;display:flex;justify-content:flex-end}
+  /* 결과 */
+  .verdict{border-radius:14px;background:var(--ink);color:#fff;padding:14px 16px;margin-top:10px}
   .verdict p{margin:0;font-size:15px;line-height:1.65}
   .verdict p+p{margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
   .verdict b{font-weight:800}
+  .verdict p.cav{font-size:12.5px;opacity:.8}
   .verdict.wait{background:#fff;color:var(--muted);border:1px dashed #c9ccd1}
   .verdict.wait p{font-size:13.5px}
-  .score{display:grid;gap:8px}
+  .demo{font-size:13px;background:#fff7e0;border:1px solid #f0dca0;border-radius:10px;padding:8px 12px;margin-top:10px}
+  .score{display:grid;gap:8px;margin-top:10px}
   .s{border:1px solid var(--line);border-radius:14px;padding:10px 14px}
   .s .n{font-weight:700;font-size:14px;display:flex;justify-content:space-between;gap:8px}
   .s .n small{font-weight:400;color:var(--muted);font-size:12px}
   .s .v{font-size:13.5px;color:var(--muted)}.s .v b{color:var(--ink);font-size:15px}
+  .s .en{font-size:12px;margin-top:2px}
   .bar{height:6px;border-radius:3px;background:#eceef0;overflow:hidden;margin:6px 0}
   .bar i{display:block;height:100%;background:var(--ok)}
+  .sumbox{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#fafaf8}
+  .sumhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:14px}
+  .sumbox pre{margin:0;white-space:pre-wrap;word-break:break-word;font:inherit;font-size:13px;line-height:1.7}
+  .sumout{width:100%;min-height:150px;margin-top:8px;font:inherit;font-size:12.5px;padding:10px;border:1px solid var(--line);border-radius:10px;resize:vertical}
   .list{display:grid;gap:8px}
   .it{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
   .it .pt{font-size:14px;word-break:break-word}
-  .it .pt.none{color:var(--muted)}
   .it .mt{font-size:12.5px;color:var(--muted);margin-top:2px}
   .it .mt b{color:var(--ink)}
   .empty{color:var(--muted);font-size:13.5px;margin:0}
-  .full{grid-column:1/-1}
-  [hidden]{display:none!important}
-  .verdict p.cav{font-size:12.5px;opacity:.8}
-  .demo{font-size:13px;background:#fff7e0;border:1px solid #f0dca0;border-radius:10px;padding:8px 12px;margin-bottom:10px}
-  .keep{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.6}
-  .sumout{width:100%;min-height:150px;margin-top:8px;font:inherit;font-size:12.5px;padding:10px;border:1px solid var(--line);border-radius:10px;resize:vertical}
-  .sumbox{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#fafaf8}
-  .sumhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:14px}
-  .sumbox pre{margin:0;white-space:pre-wrap;word-break:break-word;font:inherit;font-size:13px;line-height:1.7;color:var(--ink)}
-  .s .en{font-size:12px;margin-top:2px}
   .later{margin-top:6px;border:1px dashed #c9ccd1;border-radius:12px;padding:8px 12px;font-size:13.5px}
-  .later summary{cursor:pointer;color:var(--ink);font-weight:600}
+  .later summary{cursor:pointer;font-weight:600}
   .later .lrow{border-top:1px solid var(--line);padding:8px 0 4px;margin-top:6px}
   .later .mt{font-size:12.5px;color:var(--muted)}
   .later .f{display:flex;gap:6px;margin-top:6px}
   .later .f input{flex:1;font-size:13.5px;padding:6px 10px}
-  .ok-msg{font-size:13px;color:var(--ok);min-height:1.2em;margin:6px 0 0}
-  @media (max-width:760px){.grid{grid-template-columns:1fr}}
+  .drawer{margin-top:12px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header><div><h1>Keepers <span class="forai">for AI</span></h1><p class="kdef"><b>keeper</b> 사진가들이 여러 컷 가운데 쓸 만한 한 컷을 건졌을 때 부르는 말</p></div><span class="sketch">v1 · 중간 점검 1차</span></header>
-  <div class="intro">
-    <b>AI 그림 서비스에 낸 돈이 제값을 하는지 알려 드립니다.</b> 이 앱은 그림을 만들지 않습니다. 다른 AI에서 그림이나 영상을 만들 때, 결과가 나올 때마다 못 쓰겠는지 쓸 만한지만 눌러 주세요.
-    <ol><li>어떤 AI로 만드는지 고릅니다.</li><li>결과가 나올 때마다 못 쓰겠다 또는 쓸 만하다를 누릅니다.</li><li>어느 서비스가 나에게 맞는지 결론을 보고, 잘 먹힌 프롬프트를 다시 꺼내 씁니다.</li></ol>
-  </div>
-  <div class="grid">
-    <section class="card">
-      <h2>1. 어떤 AI로 만들었나요?</h2>
-      <p class="q">그림이나 영상을 만들 때 쓴 서비스를 고르세요.</p>
-      <select id="tool" aria-label="AI 서비스"></select>
-      <input type="text" id="custom" placeholder="서비스 이름을 적어 주세요" maxlength="24" style="width:100%;margin-top:8px" hidden aria-label="서비스 이름">
-      <div class="plan">
-        <div class="plab"><label for="planSel">어떤 요금제를 쓰고 있나요?</label><span class="info" tabindex="0" role="button" aria-label="요금 안내">!<span class="tip" role="tooltip">요금은 2026년 10월 8일 기준 월 결제 정가이고, 부가세 미포함 금액입니다. 그 뒤 바뀌었을 수 있습니다. 달러로 적힌 요금은 환율로 바꾼 값입니다. 연 결제나 할인을 받았다면 금액이 다릅니다. 실제 낸 돈으로 계산하려면 "금액 직접 입력"을 누르세요.</span></span></div>
-        <div class="prow"><select id="planSel" aria-label="요금제"></select><button class="btn sm" type="button" id="manual">금액 직접 입력</button></div>
-        <label id="pmBox" hidden>월 요금 <input type="number" id="pm" min="0" placeholder="월 요금(원)" aria-label="월 요금"> 원</label>
-        <label id="ppBox" hidden>한 번 만들 때 <input type="number" id="pp" min="0" placeholder="1회(원)" aria-label="1회 비용"> 원</label>
-        <label id="fxBox" hidden style="font-size:12.5px;color:var(--muted)">환율 1달러 = <input type="number" id="fx" min="1" value="1340" style="width:90px;padding:4px 8px;font-size:13px" aria-label="환율"> 원</label>
-        <p class="pnote" id="pnote" hidden></p>
-      </div>
-      <div class="step">
-        <h2>2. 방금 나온 결과, 쓸 만한가요?</h2>
-        <div class="tabs" role="tablist">
-          <button class="tab" role="tab" id="tabB" aria-selected="true">만들면서 바로 누르기</button>
-          <button class="tab" role="tab" id="tabA" aria-selected="false">직접 숫자로 적기</button>
-        </div>
-        <div id="modeB">
-          <p class="q">AI에서 결과가 하나 나올 때마다, 그 결과를 보고 아래 둘 중 하나를 누르세요.</p>
-          <div class="big">
-            <button class="no" id="no">못 쓰겠다<small>다시 만들 거예요</small></button>
-            <button class="ok" id="ok">쓸 만하다<small>이건 건졌어요</small></button>
-          </div>
-          <div class="tally" id="tally" aria-label="지금까지 누른 기록"></div>
-          <div class="sum" id="sum"></div>
-          <div class="got" id="got" hidden></div>
-          <p class="msg" id="msgB" role="alert"></p>
-          <div class="row"><span></span><button class="btn" id="undo">방금 것 취소</button></div>
-        </div>
-        <div id="modeA" hidden>
-          <p class="q">작업이 끝난 뒤 숫자 두 개만 적어도 됩니다. 정확하지 않아도 괜찮습니다.</p>
-          <div class="num"><span>이번에 <b>만든 횟수</b> (버린 것 포함)</span><span class="stp"><button data-d="n,-1" aria-label="만든 횟수 줄이기">−</button><input id="n" type="number" min="0" value="0" aria-label="만든 횟수"><button data-d="n,1" aria-label="만든 횟수 늘리기">+</button></span></div>
-          <div class="num"><span>그중 <b>쓸 만한 것</b></span><span class="stp"><button data-d="k,-1" aria-label="쓸 만한 것 줄이기">−</button><input id="k" type="number" min="0" value="0" aria-label="쓸 만한 것"><button data-d="k,1" aria-label="쓸 만한 것 늘리기">+</button></span></div>
-          <p class="msg" id="msgA" role="alert"></p>
-          <div class="row"><span></span><button class="btn pri" id="saveA">기록 저장</button></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>3. 그래서, 제값을 하나요?</h2>
-      <p class="q">이번 달 기록으로 낸 결론입니다.</p>
-      <div id="verdict"></div>
-      <div class="score" id="score"></div>
-      <div class="row"><button class="btn pri" id="showSum" aria-expanded="false">결과 요약 보기</button><span><button class="btn" id="demo">예시 데이터로 보기</button> <button class="btn" id="clear">모두 지우기</button></span></div>
-      <div class="sumbox" id="sumBox" hidden>
-        <div class="sumhead"><b>결과 요약</b><button class="btn sm" type="button" id="copySum">복사</button></div>
-        <pre id="sumText"></pre>
-        <p class="ok-msg" id="sumMsg" role="status"></p>
-        <textarea class="sumout" id="sumOut" readonly hidden aria-label="결과 요약 직접 복사"></textarea>
-      </div>
-      <p class="keep">기록은 이 브라우저에만 저장되고 어디로도 보내지 않습니다. 브라우저 기록(쿠키·사이트 데이터)을 지우면 함께 사라지니, 남겨 두고 싶으면 "결과 요약 보기"에서 복사해 메모에 옮겨 두세요.</p>
-    </section>
-
-    <section class="card full">
-      <div class="row" style="margin:0 0 4px"><h2 style="margin:0;color:var(--ink)">잘 먹힌 프롬프트</h2><span id="sortBox"></span></div>
-      <p class="q">건진 결과의 프롬프트를 모았습니다. 적은 시도로 건진 프롬프트가 위에 옵니다. 복사해서 다음 작업에 다시 쓰세요.</p>
-      <div class="list" id="list"></div>
-    </section>
-  </div>
+<div class="top" id="top" hidden>
+  <button class="logo" id="logo" type="button" aria-label="첫 화면으로">Keepers <span>for AI</span></button>
+  <nav class="nav"><button class="tab" type="button" data-go="work">작업</button><button class="tab" type="button" data-go="result">결과</button></nav>
 </div>
+
+<!-- 1. 첫 화면 -->
+<main class="wrap" id="v-home" hidden>
+  <div class="narrow" style="padding-top:40px">
+    <h1>Keepers <span>for AI</span></h1>
+    <p class="kdef"><b>keeper</b> 사진가들이 여러 컷 가운데 쓸 만한 한 컷을 건졌을 때 부르는 말</p>
+    <p class="lead"><b>AI 그림 서비스에 낸 돈과 시간이 제값을 하는지 알려 드립니다.</b> 이 앱은 그림을 만들지 않습니다. 다른 AI로 그림이나 영상을 만들 때, 결과가 나올 때마다 쓸 만한지만 눌러 주세요.</p>
+    <ol class="steps"><li>어떤 AI로 만드는지 고릅니다.</li><li>결과가 나올 때마다 "못 쓰겠다" 또는 "쓸 만하다"를 누릅니다.</li><li>작업이 끝나면 결과를 봅니다. 든 돈, 걸린 시간, 못 쓴 이유와 고치는 방향이 나옵니다.</li></ol>
+    <div class="cta"><button class="btn pri big" type="button" id="start">시작하기</button><button class="btn big" type="button" id="homeDemo">예시로 결과 보기</button></div>
+    <p class="note">기록은 이 브라우저에만 저장되고 어디로도 보내지 않습니다.</p>
+  </div>
+</main>
+
+<!-- 2. 작업 화면 -->
+<main class="wrap" id="v-work" hidden>
+  <div class="narrow">
+    <section class="card" id="setup">
+      <div class="setline" id="setClosed" hidden><div><small>지금 기록하는 서비스</small><b id="setText"></b></div><button class="btn sm" type="button" id="setEdit">바꾸기</button></div>
+      <div id="setOpen">
+        <h2>어떤 AI로 만드나요?</h2>
+        <select id="tool" aria-label="AI 서비스"></select>
+        <input type="text" id="custom" placeholder="서비스 이름을 적어 주세요" maxlength="24" style="width:100%;margin-top:8px" hidden aria-label="서비스 이름">
+        <div class="plan">
+          <div class="plab"><label for="planSel">어떤 요금제를 쓰고 있나요?</label><span class="info" tabindex="0" role="button" aria-label="요금 안내">!<span class="tip" role="tooltip">요금은 2026년 10월 8일 기준 월 결제 정가이고, 부가세 미포함 금액입니다. 그 뒤 바뀌었을 수 있습니다. 달러로 적힌 요금은 환율로 바꾼 값입니다. 연 결제나 할인을 받았다면 금액이 다릅니다. 실제 낸 돈으로 계산하려면 "금액 직접 입력"을 누르세요.</span></span></div>
+          <div class="prow"><select id="planSel" aria-label="요금제"></select><button class="btn sm" type="button" id="manual">금액 직접 입력</button></div>
+          <label id="pmBox" hidden>월 요금 <input type="number" id="pm" min="0" placeholder="월 요금(원)" aria-label="월 요금"> 원</label>
+          <label id="ppBox" hidden>한 번 만들 때 <input type="number" id="pp" min="0" placeholder="1회(원)" aria-label="1회 비용"> 원</label>
+          <label id="fxBox" hidden style="font-size:12.5px;color:var(--muted)">환율 1달러 = <input type="number" id="fx" min="1" value="1340" style="width:90px;padding:4px 8px;font-size:13px" aria-label="환율"> 원</label>
+          <p class="pnote" id="pnote" hidden></p>
+        </div>
+        <p class="msg" id="msgSet" role="alert"></p>
+        <div class="row" style="margin-top:6px"><span></span><button class="btn pri" type="button" id="setDone">이 설정으로 기록하기</button></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="tabB" aria-selected="true">만들면서 바로 누르기</button>
+        <button class="tab" role="tab" id="tabA" aria-selected="false">직접 숫자로 적기</button>
+      </div>
+      <div id="modeB">
+        <p class="q">결과가 하나 나올 때마다 둘 중 하나를 누르세요.</p>
+        <div class="big">
+          <button class="no" id="no">못 쓰겠다<small>다시 만들 거예요</small></button>
+          <button class="ok" id="ok">쓸 만하다<small>이건 건졌어요</small></button>
+        </div>
+        <div class="box why" id="why" hidden></div>
+        <div class="box got" id="got" hidden></div>
+        <p class="msg" id="msgB" role="alert"></p>
+        <div class="tally" id="tally" aria-label="이번 작업에서 누른 기록"></div>
+        <p class="live" id="live"></p>
+        <div class="row"><button class="btn sm" type="button" id="drawerBtn">잘 먹힌 프롬프트</button><button class="btn sm" type="button" id="undo">방금 것 취소</button></div>
+        <div class="drawer list" id="drawer" hidden></div>
+      </div>
+      <div id="modeA" hidden>
+        <p class="q">작업이 끝난 뒤 숫자 두 개만 적어도 됩니다. 정확하지 않아도 괜찮습니다.</p>
+        <div class="num"><span>이번에 <b>만든 횟수</b> (버린 것 포함)</span><span class="stp"><button data-d="n,-1" aria-label="만든 횟수 줄이기">−</button><input id="n" type="number" min="0" value="0" aria-label="만든 횟수"><button data-d="n,1" aria-label="만든 횟수 늘리기">+</button></span></div>
+        <div class="num"><span>그중 <b>쓸 만한 것</b></span><span class="stp"><button data-d="k,-1" aria-label="쓸 만한 것 줄이기">−</button><input id="k" type="number" min="0" value="0" aria-label="쓸 만한 것"><button data-d="k,1" aria-label="쓸 만한 것 늘리기">+</button></span></div>
+        <p class="msg" id="msgA" role="alert"></p>
+        <div class="row"><span></span><button class="btn" id="saveA">기록 저장</button></div>
+      </div>
+      <div class="gores"><button class="btn pri big" type="button" id="toResult">작업 끝, 결과 보기</button></div>
+    </section>
+  </div>
+</main>
+
+<!-- 3. 결과 화면 -->
+<main class="wrap" id="v-result" hidden>
+  <div id="demoBar"></div>
+  <section class="card">
+    <h2>이번 작업 결과</h2>
+    <p class="q" id="sesWhen"></p>
+    <div id="sesOut"></div>
+    <div class="row"><button class="btn" type="button" id="cont">이어서 작업하기</button><button class="btn pri" type="button" id="newSes">새 작업 시작</button></div>
+  </section>
+  <section class="card">
+    <h2>이번 달 전체</h2>
+    <p class="q">이번 달 기록을 모두 모아 낸 결론입니다.</p>
+    <div id="verdict"></div>
+    <div class="score" id="score"></div>
+  </section>
+  <section class="card">
+    <div class="row" style="margin:0 0 4px"><h2 style="margin:0;color:var(--ink)">잘 먹힌 프롬프트</h2><span id="sortBox"></span></div>
+    <p class="q">건진 결과의 프롬프트입니다. 적은 시도로 건진 것이 위에 옵니다.</p>
+    <div class="list" id="list"></div>
+  </section>
+  <section class="card">
+    <div class="row" style="margin:0"><button class="btn pri" id="showSum" aria-expanded="false">결과 요약 보기</button><span><button class="btn" id="demo">예시 데이터로 보기</button> <button class="btn" id="clear">모두 지우기</button></span></div>
+    <div class="sumbox" id="sumBox" hidden>
+      <div class="sumhead"><b>결과 요약</b><button class="btn sm" type="button" id="copySum">복사</button></div>
+      <pre id="sumText"></pre>
+      <p class="ok-msg" id="sumMsg" role="status"></p>
+      <textarea class="sumout" id="sumOut" readonly hidden aria-label="결과 요약 직접 복사"></textarea>
+    </div>
+    <p class="note">기록은 이 브라우저에만 저장되고 어디로도 보내지 않습니다. 브라우저 기록(쿠키·사이트 데이터)을 지우면 함께 사라지니, 남겨 두고 싶으면 "결과 요약 보기"에서 복사해 메모에 옮겨 두세요.</p>
+    <p class="note">걸린 시간은 같은 서비스에서 연달아 누른 간격으로 계산합니다(8초 미만 간격과, 이미지 10분·영상 20분을 넘는 간격은 제외). 전력 참고치는 공개 모델을 잰 연구 값(이미지 1장 약 0.6~2.9Wh, 5초 영상 1개 약 30~944Wh)으로 추정한 범위이며, 실제 서비스의 값은 공개되지 않아 다를 수 있습니다. 스마트폰 완충은 약 15Wh로 봅니다.</p>
+  </section>
+</main>
+
 <script>
-const KEY='keepers-for-ai.v1', MIN=10, $=s=>document.querySelector(s);
+const KEY='keepers-for-ai.v1', MIN=10, SES_GAP=3*3600*1000, $=s=>document.querySelector(s);
 const SERVICES=['ChatGPT (이미지)','Midjourney','Adobe Firefly','Gemini (이미지)','Stable Diffusion','Leonardo','Ideogram','Flux','Runway (영상)','Sora (영상)','Kling (영상)','Pika (영상)','Veo (영상)'];
 /* 요금제: 월 결제 정가(부가세 미포함), 2026-10-08 확인. [이름, 금액, 통화]. KRW는 한국 공식 가격, USD는 공식 페이지의 달러 가격(환율로 환산) */
 const GPT=[['Go',11818,'KRW'],['Plus',26364,'KRW'], /* 한국 공식 가격 13,000원·29,000원에서 부가세 10%를 뺀 값 */
@@ -190,8 +238,18 @@ const PLANS={'ChatGPT (이미지)':GPT,'Sora (영상)':GPT.slice(1),
   'Runway (영상)':[['Standard',15,'USD'],['Pro',35,'USD'],['Max',95,'USD']],
   'Pika (영상)':[['Starter',10,'USD'],['Creator',35,'USD'],['Fancy (가장 낮은 단계)',95,'USD']]};
 const NOPLAN={'Stable Diffusion':'Stable Diffusion은 개인용 정액 요금제를 확인하지 못했습니다. 돈을 내고 있다면 금액을 직접 적어 주세요.','Flux':'Flux는 구독 없이 만든 만큼 내는 방식입니다. "만들 때마다 돈이나 크레딧이 든다"를 골라 1회 금액을 적어 주세요.','Kling (영상)':'Kling은 자료마다 가격이 크게 달라 목록을 넣지 않았습니다. 결제한 금액을 직접 적어 주세요.'};
+/* 못 쓴 이유와 고치는 방향 (일반적인 프롬프트 작성 요령) */
+const REASONS=[
+  ['hand','손·얼굴이 이상함','손과 얼굴은 AI가 자주 틀리는 부분입니다. 손이 꼭 필요하지 않으면 빼거나 작게(멀리서 본 구도) 두고, 필요하면 "자연스러운 손, 손가락 다섯 개"처럼 적어 보세요.'],
+  ['text','글자가 틀림','넣을 글자는 따옴표로 감싸고 1~3단어로 짧게 줄이세요. 위치와 글꼴도 적어 주면 좋습니다. 긴 문장은 이미지를 만든 뒤 따로 얹는 편이 정확합니다.'],
+  ['comp','구도가 다름','시점(위에서 내려다본, 정면)과 비율(4:3, 세로)을 먼저 적고, 위치는 "왼쪽 위, 가운데, 오른쪽 아래"처럼 구체적으로 적어 보세요. 요소 수를 줄이면 지시를 더 잘 따릅니다.'],
+  ['mood','분위기·스타일이 다름','"예쁘게" 같은 말 대신 빛(오후 자연광, 네온), 색(따뜻한 갈색 톤), 매체(필름 사진, 수채화)로 나눠 적어 보세요. 서비스가 지원하면 참고 이미지를 함께 주세요.'],
+  ['detail','화질·디테일 부족','"사실적인 사진, 선명한 초점"처럼 품질을 적거나, 살리고 싶은 질감·재질을 적어 보세요. 고화질 옵션이 있으면 켜 보세요.'],
+  ['motion','움직임이 어색함','움직임은 하나로 줄이고, 속도(천천히)와 카메라 움직임(고정, 천천히 다가가기)을 따로 적어 보세요. 길이를 짧게 하면 어색함이 줄어듭니다.'],
+  ['etc','기타','무엇이 마음에 안 들었는지 한 문장으로 적어 AI에게 고쳐 달라고 해 보세요.']];
+const RMAP=Object.fromEntries(REASONS.map(r=>[r[0],r]));
 const planWon=p=>p[2]==='KRW'?p[1]:Math.round(p[1]*fxv());
-let st={tools:{},log:[]}, real=null, lastLen=-1, sortBy='easy', clearArmed=null, laterOpen=false;
+let st={tools:{},log:[]}, real=null, lastLen=-1, sortBy='easy', clearArmed=null, laterOpen=false, view='';
 try{const d=JSON.parse(localStorage.getItem(KEY)||'null'); if(d&&d.tools&&Array.isArray(d.log)) st=d;}catch(e){}
 const inDemo=()=>real!==null;
 const save=()=>{ if(inDemo()) return; try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){} };
@@ -202,10 +260,45 @@ const money=v=>Math.max(0,Math.min(99999999,Math.floor(Number(v)||0)));
 const r1=x=>x>=10?String(Math.round(x)):String(Math.round(x*10)/10);
 const thisMonth=at=>{const a=new Date(at), n=new Date(); return a.getFullYear()===n.getFullYear()&&a.getMonth()===n.getMonth();};
 const monthLog=()=>st.log.filter(e=>thisMonth(e.at));
-/* 정액제는 이번 달 지난 날수만큼만 요금을 반영한다 (계획서 5장) */
+const sesLog=()=>st.ses?st.log.filter(e=>e.at>=st.ses):[];
+const hhmm=t=>{const d=new Date(t); return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;};
+/* 정액제는 이번 달 지난 날수만큼만 요금을 반영한다 */
 const dayInfo=()=>{const n=new Date(); return {d:n.getDate(),all:new Date(n.getFullYear(),n.getMonth()+1,0).getDate()};};
 const usedFee=cost=>{const {d,all}=dayInfo(); return cost*d/all;};
-// 1. 서비스
+const kindOf=name=>/영상/.test(name)?'영상':'이미지';
+/* 걸린 시간: 같은 서비스에서 연달아 누른 간격. 8초 미만(몰아서 누름)과 이미지 10분·영상 20분 초과(쉬었다 옴)는 뺀다 */
+function gaps(list,name){ const l=list.filter(e=>e.one&&e.t===name).sort((a,b)=>a.at-b.at), iv=[], cap=/영상/.test(name)?1200:600;
+  for(let i=1;i<l.length;i++){ const d=(l[i].at-l[i-1].at)/1000; if(d>=8&&d<=cap) iv.push(d); } return iv; }
+function genSec(name){ const iv=gaps(monthLog(),name); return iv.length>=3?iv.reduce((a,x)=>a+x,0)/iv.length:null; }
+const dur=sec=>sec<60?`${Math.round(sec)}초`:sec<3600?`${r1(sec/60)}분`:`${r1(sec/3600)}시간`;
+/* 전력 참고치(추정): 이미지 1장 약 0.6~2.9Wh (MIT Technology Review 2025 SD3 / Luccioni 외 2024 평균), 5초 영상 약 30~944Wh (MIT TR 2025 CogVideoX). 스마트폰 완충 약 15Wh */
+const WH={'이미지':[0.6,2.9],'영상':[30,944]}, PHONE=15;
+const wh=x=>x>=1000?`${r1(x/1000)}kWh`:x>=10?`${Math.round(x)}Wh`:`${r1(x)}Wh`;
+const whRange=(name,count)=>{ const [a,b]=WH[kindOf(name)]; return [a*count,b*count]; };
+const ph=x=>{ const v=x/PHONE; return v<0.1?v.toFixed(2):r1(v); };
+const reasonCount=list=>{ const c={}; list.forEach(e=>{ if(e.r&&!e.k) c[e.r]=(c[e.r]||0)+1; }); return Object.entries(c).sort((a,b)=>b[1]-a[1]); };
+const reasonText=cs=>cs.map(([r,n])=>`${(RMAP[r]||RMAP.etc)[1]} ${n}번`).join(', ');
+
+// ── 화면 이동
+function go(v){ if(location.hash.slice(1)!==v) location.hash=v; else apply(v); }
+function apply(v){ if(!['home','work','result'].includes(v)) v='home';
+  if(v==='work'&&inDemo()) exitDemo();
+  if(v==='work') ensureSession();
+  view=v; ['home','work','result'].forEach(x=>$('#v-'+x).hidden=x!==v); $('#top').hidden=v==='home';
+  document.querySelectorAll('[data-go]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.go===v)));
+  window.scrollTo(0,0); render(); }
+window.addEventListener('hashchange',()=>apply(location.hash.slice(1)));
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+$('#logo').onclick=()=>go('home');
+$('#start').onclick=()=>go('work');
+$('#homeDemo').onclick=()=>{ enterDemo(); go('result'); };
+$('#toResult').onclick=()=>go('result');
+$('#cont').onclick=()=>go('work');
+$('#newSes').onclick=()=>{ if(inDemo()) exitDemo(); st.ses=Date.now(); save(); $('#got').hidden=true; $('#why').hidden=true; go('work'); };
+function ensureSession(){ const last=st.log.length?Math.max(...st.log.map(e=>e.at)):0, now=Date.now();
+  if(!st.ses||now-Math.max(last,st.ses)>SES_GAP){ st.ses=now; save(); } }
+
+// ── 설정
 const sel=$('#tool');
 sel.append(el('option',{value:''},'서비스를 고르세요'),...SERVICES.map(s=>el('option',{value:s},s)),el('option',{value:'__custom'},'목록에 없음 (직접 적기)'));
 const toolName=()=>sel.value==='__custom'?$('#custom').value.trim():sel.value;
@@ -218,50 +311,50 @@ function showBoxes(){ $('#pmBox').hidden=ps.value!=='month'; $('#ppBox').hidden=
 function planOf(){ const v=ps.value; if(/^p\d+$/.test(v)){ const p=(PLANS[sel.value]||[])[Number(v.slice(1))]; if(p) return {plan:'month',cost:planWon(p),planName:p[0]}; }
   return {plan:v==='month'||v==='per'?v:'free',cost:v==='month'?money($('#pm').value):v==='per'?money($('#pp').value):0}; }
 function loadPlan(){ const t=st.tools[toolName()]; if(!t) return; const i=(PLANS[sel.value]||[]).findIndex(p=>p[0]===t.planName); ps.value=t.plan==='month'&&i>=0?'p'+i:t.plan; if(!ps.value) ps.value='free'; $('#pm').value=t.plan==='month'&&i<0?t.cost:''; $('#pp').value=t.plan==='per'?t.cost:''; showBoxes(); }
-sel.onchange=()=>{ $('#custom').hidden=sel.value!=='__custom'; fillPlans(); if(st.tools[toolName()]) loadPlan(); else { $('#pm').value=''; $('#pp').value=''; } $('#got').hidden=true; render(); };
+const planShort=t=>t.plan==='month'?`${t.planName?t.planName+' · ':''}월 ${won(t.cost)}`:t.plan==='per'?`1회 ${won(t.cost)}`:'무료';
+function setOpen(open){ $('#setOpen').hidden=!open; $('#setClosed').hidden=open; if(!open){ const n=toolName(); $('#setText').textContent=n?`${n} · ${planShort(st.tools[n]||planOf())}`:''; } }
+sel.onchange=()=>{ $('#custom').hidden=sel.value!=='__custom'; fillPlans(); if(st.tools[toolName()]) loadPlan(); else { $('#pm').value=''; $('#pp').value=''; } $('#got').hidden=true; $('#why').hidden=true; render(); };
 $('#custom').oninput=()=>{loadPlan();render();};
 document.querySelectorAll('.info').forEach(i=>{ const place=()=>{ const t=i.querySelector('.tip'); t.style.left='-8px'; const r=t.getBoundingClientRect(), W=document.documentElement.clientWidth; let dx=0; if(r.right>W-10) dx=W-10-r.right; if(r.left+dx<10) dx=10-r.left; t.style.left=(-8+dx)+'px'; }; i.addEventListener('mouseenter',place); i.addEventListener('focus',place); });
 $('#manual').onclick=()=>{ ps.value='month'; ps.dispatchEvent(new Event('change')); $('#pm').focus(); };
 [ps,$('#pm'),$('#pp'),$('#fx')].forEach(i=>i.addEventListener('change',()=>{ if(i===$('#fx')){ const keep=ps.value; fillPlans(); ps.value=keep; } showBoxes(); const n=toolName(); if(inDemo()) exitDemo(); if(n&&st.tools[n]){ st.tools[n]=planOf(); save(); render(); } }));
-function needTool(msgEl){ const n=toolName(); if(!n){ msgEl.textContent='먼저 1번에서 어떤 AI로 만들었는지 골라 주세요.'; sel.focus(); return ''; } if(inDemo()) exitDemo(); msgEl.textContent=''; st.tools[n]=planOf(); return n; }
-// 2. 기록
+$('#setDone').onclick=()=>{ const n=toolName(), m=$('#msgSet'); if(!n){ m.textContent='서비스를 골라 주세요.'; sel.focus(); return; } m.textContent=''; st.tools[n]=planOf(); st.cur={sel:sel.value,custom:$('#custom').value}; save(); setOpen(false); render(); };
+$('#setEdit').onclick=()=>setOpen(true);
+function needTool(msgEl){ const n=toolName(); if(!n){ msgEl.textContent='먼저 위에서 어떤 AI로 만드는지 골라 주세요.'; setOpen(true); sel.focus(); return ''; } if(inDemo()) exitDemo(); msgEl.textContent=''; st.tools[n]=planOf(); st.cur={sel:sel.value,custom:$('#custom').value}; return n; }
+
+// ── 기록
 $('#tabA').onclick=()=>mode('A'); $('#tabB').onclick=()=>mode('B');
 function mode(m){ $('#modeA').hidden=m!=='A'; $('#modeB').hidden=m!=='B'; $('#tabA').setAttribute('aria-selected',m==='A'); $('#tabB').setAttribute('aria-selected',m==='B'); }
 document.querySelectorAll('.stp button').forEach(b=>b.onclick=()=>{ const [id,d]=b.dataset.d.split(','); const i=$('#'+id); i.value=int(Number(i.value)+Number(d)); });
 $('#saveA').onclick=()=>{ const m=$('#msgA'), n=int($('#n').value), k=int($('#k').value);
   if(!toolName()){ needTool(m); return; }
   if(n<1){ m.textContent='만든 횟수를 1 이상으로 적어 주세요.'; return; } if(k>n){ m.textContent='쓸 만한 것이 만든 횟수보다 많을 수 없습니다.'; return; }
-  const t=needTool(m); st.log.push({t,n,k,at:Date.now()}); $('#n').value=0; $('#k').value=0; save(); render(); m.textContent=''; };
-const lastKeep=t=>[...st.log].reverse().find(x=>x.one&&x.k&&x.t===t);
-function hit(ok){ const t=needTool($('#msgB')); if(!t) return; st.log.push({t,n:1,k:ok?1:0,at:Date.now(),one:true}); save(); render();
-  const box=$('#got'); if(!ok){ box.hidden=true; return; }
-  const L=cuts().filter(c=>c.t===t).pop(), pi=el('input',{type:'text',maxlength:'400',placeholder:'쓴 프롬프트를 붙여 넣으세요 (선택)','aria-label':'프롬프트'}), bt=el('button',{class:'btn',type:'button'},'남기기'), ms=el('small',null,'프롬프트를 남겨 두면 아래 목록에 모여서 다음에 다시 쓸 수 있습니다. 지금 못 남겨도 아래 "잘 먹힌 프롬프트"에서 나중에 남길 수 있습니다.');
-  bt.onclick=()=>{ const e=lastKeep(t), p=pi.value.trim(); if(!e) return; if(!p){ ms.textContent='프롬프트를 적어 주세요. 건너뛰어도 됩니다.'; return; } e.p=p; save(); render(); ms.textContent='목록에 남겼습니다.'; };
-  pi.addEventListener('keydown',e=>{ if(e.key==='Enter') bt.click(); });
-  box.hidden=false; box.replaceChildren(el('b',null,`${L.tries}번 만에 건졌습니다.`),L.price==null?'':` 이 결과물에 ${won(L.price)}이 들었습니다.`,el('div',{class:'f'},pi,bt),ms); }
+  const t=needTool(m); ensureSession(); st.log.push({t,n,k,at:Date.now()}); $('#n').value=0; $('#k').value=0; save(); render(); m.textContent=''; };
+const lastOne=(t,k)=>[...st.log].reverse().find(x=>x.one&&x.t===t&&(k==null||x.k===k));
+function hit(ok){ const t=needTool($('#msgB')); if(!t) return; ensureSession(); st.log.push({t,n:1,k:ok?1:0,at:Date.now(),one:true}); save(); setOpen(false); render();
+  $('#got').hidden=!ok; $('#why').hidden=ok;
+  if(ok){ const L=cuts().filter(c=>c.t===t).pop(), pi=el('input',{type:'text',maxlength:'400',placeholder:'쓴 프롬프트를 붙여 넣으세요 (선택)','aria-label':'프롬프트'}), bt=el('button',{class:'btn',type:'button'},'남기기'), ms=el('small',null,'지금 못 남겨도 결과 화면에서 나중에 남길 수 있습니다.');
+    bt.onclick=()=>{ const e=lastOne(t,1), p=pi.value.trim(); if(!e) return; if(!p){ ms.textContent='프롬프트를 적어 주세요. 건너뛰어도 됩니다.'; return; } e.p=p; save(); render(); ms.textContent='남겼습니다.'; };
+    pi.addEventListener('keydown',e=>{ if(e.key==='Enter') bt.click(); });
+    $('#got').replaceChildren(el('b',null,`${L.tries}번 만에 건졌습니다.`),L.price==null?'':` 이 결과물에 ${won(L.price)}이 들었습니다.`,el('div',{class:'f'},pi,bt),ms); }
+  else whyBox(t); }
+function whyBox(t){ const box=$('#why'), list=REASONS.filter(r=>r[0]!=='motion'||kindOf(t)==='영상'), fix=el('div',{class:'fix',hidden:''});
+  const chips=list.map(r=>{ const b=el('button',{class:'chip',type:'button','aria-pressed':'false'},r[1]);
+    b.onclick=()=>{ const e=lastOne(t,0); if(!e) return; e.r=r[0]; save(); chips.forEach(c=>c.setAttribute('aria-pressed',String(c===b)));
+      const req=`방금 만든 ${kindOf(t)}에서 "${r[1]}" 문제가 있었어. 원래 의도는 그대로 두고, 이 문제가 생기지 않도록 프롬프트를 고쳐서 다시 만들어 줘.`, cp=el('button',{class:'btn sm',type:'button'},'AI에게 보낼 수정 요청 복사');
+      cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(req); cp.textContent='복사됨'; }catch(e){ cp.textContent='복사 실패'; } setTimeout(()=>cp.textContent='AI에게 보낼 수정 요청 복사',1500); };
+      fix.hidden=false; fix.replaceChildren(el('p',null,el('b',null,'고치는 방향 '),r[2]),el('div',{class:'row',style:'margin-top:8px'},el('span',null,`"${req}"`),cp)); render(); };
+    return b; });
+  box.replaceChildren(el('b',null,'왜 못 쓰겠나요?'),' ',el('span',{style:'color:var(--muted)'},'(선택)'),el('div',{class:'chips'},chips),fix); }
 $('#no').onclick=()=>hit(false); $('#ok').onclick=()=>hit(true);
-$('#undo').onclick=()=>{ if(inDemo()) return; const t=toolName(); for(let i=st.log.length-1;i>=0;i--){ if(st.log[i].one&&st.log[i].t===t){st.log.splice(i,1);break;} } $('#got').hidden=true; save(); render(); };
-// 계산 (이번 달 기록 기준)
-function totals(name){ const l=monthLog().filter(x=>x.t===name); return {n:l.reduce((a,x)=>a+x.n,0),k:l.reduce((a,x)=>a+x.k,0)}; }
+$('#undo').onclick=()=>{ if(inDemo()) return; const t=toolName(); for(let i=st.log.length-1;i>=0;i--){ if(st.log[i].one&&st.log[i].t===t&&st.log[i].at>=(st.ses||0)){st.log.splice(i,1);break;} } $('#got').hidden=true; $('#why').hidden=true; save(); render(); };
+$('#drawerBtn').onclick=()=>{ const d=$('#drawer'); d.hidden=!d.hidden; render(); };
+
+// ── 계산
+function totals(name,list){ const l=(list||monthLog()).filter(x=>x.t===name); return {n:l.reduce((a,x)=>a+x.n,0),k:l.reduce((a,x)=>a+x.k,0)}; }
 function cuts(){ const fail={}, out=[]; monthLog().forEach(e=>{ if(!e.one) return; fail[e.t]=fail[e.t]||0; if(e.k){ const tl=st.tools[e.t]||{}, tries=fail[e.t]+1; out.push({e,t:e.t,tries,p:e.p||'',price:tl.plan==='per'?tl.cost*tries:null,at:e.at}); fail[e.t]=0; } else fail[e.t]++; }); return out; }
-const kindOf=name=>/영상/.test(name)?'영상':'이미지';
-/* 시간 비용: 같은 서비스에서 연달아 누른 간격 = 생성 한 번에 걸린 시간으로 본다.
-   8초 미만(몰아서 누른 것)과 긴 간격(이미지 10분·영상 20분 초과, 쉬었다 온 것)은 빼고, 간격이 3개 이상일 때만 계산한다. */
-function genSec(name){ const l=monthLog().filter(e=>e.one&&e.t===name).sort((a,b)=>a.at-b.at), iv=[], cap=/영상/.test(name)?1200:600;
-  for(let i=1;i<l.length;i++){ const d=(l[i].at-l[i-1].at)/1000; if(d>=8&&d<=cap) iv.push(d); }
-  return iv.length>=3?iv.reduce((a,x)=>a+x,0)/iv.length:null; }
-const dur=sec=>sec<60?`${Math.round(sec)}초`:sec<3600?`${r1(sec/60)}분`:`${r1(sec/3600)}시간`;
-/* 전력 참고치(추정): 공개 모델을 잰 연구 값의 범위. 실제 서비스 값은 공개되지 않았다.
-   이미지 1장 약 0.6~2.9Wh (MIT Technology Review 2025, SD3 1024px / Luccioni 외 2024 평균)
-   5초 영상 1개 약 30~944Wh (MIT Technology Review 2025, CogVideoX 이전·새 버전)
-   스마트폰 완충은 약 15Wh로 본다. */
-const WH={'이미지':[0.6,2.9],'영상':[30,944]}, PHONE=15;
-const wh=x=>x>=1000?`${r1(x/1000)}kWh`:x>=10?`${Math.round(x)}Wh`:`${r1(x)}Wh`;
-const whRange=(name,count)=>{ const [a,b]=WH[kindOf(name)]; return [a*count,b*count]; };
-const ph=x=>{ const v=x/PHONE; return v<0.1?v.toFixed(2):r1(v); };
-function getRows(){ return Object.keys(st.tools).map(t=>{ const s=totals(t), tl=st.tools[t], fee=tl.plan==='month'?usedFee(tl.cost):tl.plan==='per'?tl.cost*s.n:null;
-  const g=genSec(t);
-  return {t,s,plan:tl.plan,cost:tl.cost,planName:tl.planName||'',fee,per:fee!=null&&s.k?fee/s.k:null,keepSec:g!=null&&s.k?g*s.n/s.k:null}; }).filter(r=>r.s.n); }
+function getRows(){ return Object.keys(st.tools).map(t=>{ const s=totals(t), tl=st.tools[t], fee=tl.plan==='month'?usedFee(tl.cost):tl.plan==='per'?tl.cost*s.n:null, g=genSec(t);
+  return {t,s,plan:tl.plan,cost:tl.cost,planName:tl.planName||'',fee,per:fee!=null&&s.k?fee/s.k:null,keepSec:g!=null&&s.k?g*s.n/s.k:null,reasons:reasonCount(monthLog().filter(e=>e.t===t))}; }).filter(r=>r.s.n); }
 function verdicts(rows){ const out=[], small=rows.filter(r=>r.s.n<MIN), okRows=rows.filter(r=>r.s.n>=MIN), said=new Set(); let compared=false;
   const lead=()=>out.length?'':'내 기록 기준으로 ';
   ['이미지','영상'].forEach(kind=>{ const g=okRows.filter(r=>kindOf(r.t)===kind), priced=g.filter(r=>r.per!=null).sort((a,b)=>a.per-b.per);
@@ -271,76 +364,108 @@ function verdicts(rows){ const out=[], small=rows.filter(r=>r.s.n<MIN), okRows=r
   okRows.filter(r=>!said.has(r.t)).forEach(r=>{ if(!r.s.k) out.push([lead(),el('b',null,r.t),`는 ${r.s.n}번 만들었지만 아직 건진 것이 없습니다.`]);
     else if(r.plan==='month'){ const {d,all}=dayInfo(); out.push([lead(),el('b',null,r.t),`는 이번 달 정액 ${won(r.cost)} 가운데 지난 ${d}일치(${all}일 중) ${won(r.fee)}으로 ${r.s.k}개를 건졌습니다. 결과물 하나에 `,el('b',null,won(r.per)),'입니다.']); }
     else out.push([lead(),el('b',null,r.t),`는 ${r.s.n}번에 ${r.s.k}번 건졌습니다.`,r.per!=null?[' 결과물 하나에 ',el('b',null,won(r.per)),'입니다.']:` 평균 ${r1(r.s.n/r.s.k)}번 만에 하나입니다.`,r.plan==='free'?(r.keepSec!=null?[' 무료라 돈은 들지 않았지만, 하나 건지는 데 ',el('b',null,`약 ${dur(r.keepSec)}`),'이 걸렸습니다.']:' 무료(또는 요금 미입력)로 기록해 비용은 계산하지 않았습니다.'):'']); });
+  okRows.forEach(r=>{ const tot=r.reasons.reduce((a,x)=>a+x[1],0); if(tot>=3){ const [top,c]=r.reasons[0]; out.push([el('b',null,r.t),`는 주로 "${(RMAP[top]||RMAP.etc)[1]}"에서 실패했습니다(이유를 고른 ${tot}번 중 ${c}번).`]); } });
   return {out,small,compared}; }
+/* 이번 작업(세션) 결과: 서비스별 문장 */
+function sessionLines(){ const L=sesLog(), names=[...new Set(L.map(e=>e.t))];
+  return names.map(t=>{ const s=totals(t,L), tl=st.tools[t]||{plan:'free',cost:0}, out=[];
+    out.push([el('b',null,t),`: ${s.n}번 만들어 ${s.k}개를 건졌습니다.`,s.k?` 평균 ${r1(s.n/s.k)}번 만에 하나입니다.`:'']);
+    if(tl.plan==='per'){ const c=tl.cost*s.n; out.push(['든 금액 ',el('b',null,won(c)),` (1회 ${won(tl.cost)} × ${s.n}번)`,s.k?`, 결과물 하나에 ${won(c/s.k)}.`:'.']); }
+    else if(tl.plan==='month'){ const m=totals(t), per=m.n?usedFee(tl.cost)/m.n:0, c=per*s.n; out.push(['든 금액 약 ',el('b',null,won(c)),` (이번 달 생성 1회당 ${won(per)} 기준 추정)`,s.k?`, 결과물 하나에 약 ${won(c/s.k)}.`:'.']); }
+    else out.push(['무료라 든 금액은 0원입니다.']);
+    const iv=gaps(L,t); if(iv.length>=2){ const sec=iv.reduce((a,x)=>a+x,0); out.push(['걸린 시간 ',el('b',null,`약 ${dur(sec)}`),' (누른 간격 기준)',s.k?`, 하나 건지는 데 약 ${dur(sec/s.k)}.`:'.']); }
+    const [a,b]=whRange(t,s.n); out.push([`전력 참고치(추정) 약 ${wh(a)}~${wh(b)}, 스마트폰 완충 약 ${ph(a)}~${ph(b)}번.`]);
+    const rc=reasonCount(L.filter(e=>e.t===t)); if(rc.length) out.push([`못 쓴 이유: ${reasonText(rc)}.`]);
+    return {t,out}; }); }
+
+// ── 그리기
 function render(){
+  // 작업 화면
+  const t=toolName(), L=sesLog(), mine=L.filter(x=>x.one&&x.t===t), show=mine.slice(-60), ty=$('#tally');
+  ty.replaceChildren(...show.map((x,i)=>el('span',{class:'mk'+(x.k?' ok':'')+(i===show.length-1&&mine.length>lastLen&&lastLen>=0?' new':''),title:x.k?'쓸 만하다':'못 쓰겠다'+(x.r?` · ${(RMAP[x.r]||RMAP.etc)[1]}`:'')},x.k?'○':'✕')));
+  if(!show.length) ty.append(el('span',{class:'ph'},t?'누를 때마다 여기에 하나씩 쌓입니다.':'먼저 위에서 AI를 골라 주세요.')); lastLen=mine.length;
+  const s=totals(t,L); $('#live').replaceChildren(...(s.n?['이번 작업 · ',el('b',null,`${s.n}번 중 ${s.k}개`),s.k?` · 평균 ${r1(s.n/s.k)}번 만에 하나`:'']:[]));
+  const C=cuts(), shown=C.filter(c=>c.p);
+  $('#drawerBtn').textContent=`잘 먹힌 프롬프트 (${shown.length})`;
+  if(!$('#drawer').hidden){ const d=$('#drawer'); d.replaceChildren(); if(!shown.length) d.append(el('p',{class:'empty'},'아직 남긴 프롬프트가 없습니다.')); [...shown].sort((a,b)=>a.tries-b.tries||b.at-a.at).slice(0,8).forEach(c=>d.append(promptItem(c))); }
+  if(view!=='result') return;
+  // 결과 화면
+  $('#demoBar').replaceChildren(...(inDemo()?[el('div',{class:'demo'},'예시 데이터를 보는 중입니다. 내 기록은 그대로 있습니다. 아래 "내 기록으로 돌아가기"를 누르거나 작업 화면으로 가면 돌아갑니다.')]:[]));
+  $('#sesWhen').textContent=st.ses?`${hhmm(st.ses)}부터 기록한 내용입니다.`:'';
+  const so=$('#sesOut'); so.replaceChildren(); const SL=sessionLines();
+  if(!SL.length) so.append(el('div',{class:'verdict wait'},el('p',null,'이번 작업에는 아직 기록이 없습니다. 작업 화면에서 결과마다 버튼을 눌러 주세요.')));
+  else so.append(el('div',{class:'verdict',id:'sesV'},SL.map(x=>el('p',{class:'sl'},x.out.map((o,i)=>[i?' ':'',o])))));
   const rows=getRows(), v=$('#verdict'); v.replaceChildren();
-  if(inDemo()) v.append(el('div',{class:'demo'},'예시 데이터를 보는 중입니다. 내 기록은 그대로 있고, 버튼을 누르면 내 기록으로 돌아갑니다.'));
-  if(!rows.length) v.append(el('div',{class:'verdict wait'},el('p',null,'기록이 쌓이면 여기에 결론이 문장으로 나옵니다. 어떤 모습인지 보려면 아래 "예시 데이터로 보기"를 눌러 보세요.')));
+  if(!rows.length) v.append(el('div',{class:'verdict wait'},el('p',null,'기록이 쌓이면 여기에 결론이 문장으로 나옵니다.')));
   else { const {out,small,compared}=verdicts(rows);
-    if(out.length) v.append(el('div',{class:'verdict',id:'vmain'},out.map(o=>el('p',{class:'vl'},o)),compared?el('p',{class:'cav'},'서비스 사이의 차이는 서비스가 아니라 작업 종류에서 올 수도 있습니다. 같은 작업을 여러 서비스로 해 보면 가장 정확합니다.'):null));
+    if(out.length) v.append(el('div',{class:'verdict'},out.map(o=>el('p',{class:'vl'},o)),compared?el('p',{class:'cav'},'서비스 사이의 차이는 서비스가 아니라 작업 종류에서 올 수도 있습니다. 같은 작업을 여러 서비스로 해 보면 가장 정확합니다.'):null));
     if(small.length) v.append(el('div',{class:'verdict wait'},el('p',{class:'vs'},`기록이 ${MIN}번보다 적은 서비스는 아직 결론을 내지 않습니다: `+small.map(r=>`${r.t} ${r.s.n}번`).join(', ')+'. 적은 기록으로 비교하면 틀리기 쉽기 때문입니다.'))); }
   const sc=$('#score'); sc.replaceChildren();
   rows.sort((a,b)=>(a.per??1e12)-(b.per??1e12)).forEach(r=>sc.append(el('div',{class:'s'},el('div',{class:'n'},r.t,el('small',null,planLabel(r))),
     el('div',{class:'bar'},el('i',{style:`width:${Math.round(r.s.k/r.s.n*100)}%`})),
     el('div',{class:'v'},`${r.s.n}번 만들어 ${r.s.k}개 건짐 · `,r.s.k?['평균 ',el('b',null,`${r1(r.s.n/r.s.k)}번`),' 만에 하나']:'아직 건진 것 없음',r.per!=null?[' · 하나에 ',el('b',null,won(r.per))]:null),
-    el('div',{class:'v'},r.fee!=null?['이번 달 쓴 금액 ',el('b',null,won(r.fee)),r.plan==='month'?` (월 요금 중 ${dayInfo().d}일치)`:` (1회 ${won(r.cost)} × ${r.s.n}번)`]:'무료·요금 미입력이라 쓴 금액은 0원으로 봅니다. 유료라면 1번에서 요금제를 골라 주세요.'),
-    el('div',{class:'v'},r.keepSec!=null?['걸린 시간 하나에 ',el('b',null,`약 ${dur(r.keepSec)}`),' (누른 간격으로 계산)']:'걸린 시간: "만들면서 바로 누르기"로 3번 넘게 연달아 기록하면 나옵니다.'),
-    el('div',{class:'v en'},(()=>{ const [a,b]=whRange(r.t,r.s.n); return `전력 참고치(추정) 이번 달 약 ${wh(a)}~${wh(b)} · 스마트폰 완충 약 ${ph(a)}~${ph(b)}번`+(r.s.k?` · 하나에 약 ${wh(a/r.s.k)}~${wh(b/r.s.k)}`:''); })()))));
-  if(rows.length) sc.append(el('p',{class:'keep'},'걸린 시간은 같은 서비스에서 연달아 누른 간격으로 계산합니다(8초 미만 간격과, 이미지 10분·영상 20분을 넘는 간격은 제외). 전력 참고치는 공개 모델을 잰 연구 값(이미지 1장 약 0.6~2.9Wh, 5초 영상 1개 약 30~944Wh)으로 추정한 범위이며, 실제 서비스의 값은 공개되지 않아 다를 수 있습니다. 스마트폰 완충은 약 15Wh로 봅니다.'));
-  if($('#showSum').getAttribute('aria-expanded')==='true') fillSum();
-  const C=cuts(), list=$('#list'); list.replaceChildren();
-  C.sort(sortBy==='easy'?(a,b)=>a.tries-b.tries||b.at-a.at:(a,b)=>b.at-a.at);
-  const shown=C.filter(c=>c.p), bare=C.length-shown.length;
+    el('div',{class:'v'},r.fee!=null?['이번 달 쓴 금액 ',el('b',null,won(r.fee)),r.plan==='month'?` (월 요금 중 ${dayInfo().d}일치)`:` (1회 ${won(r.cost)} × ${r.s.n}번)`]:'무료·요금 미입력이라 쓴 금액은 0원으로 봅니다.'),
+    el('div',{class:'v'},r.keepSec!=null?['걸린 시간 하나에 ',el('b',null,`약 ${dur(r.keepSec)}`)]:'걸린 시간: "만들면서 바로 누르기"로 3번 넘게 연달아 기록하면 나옵니다.'),
+    r.reasons.length?el('div',{class:'v'},`못 쓴 이유: ${reasonText(r.reasons)}`):null,
+    el('div',{class:'v en'},(()=>{ const [a,b]=whRange(r.t,r.s.n); return `전력 참고치(추정) 이번 달 약 ${wh(a)}~${wh(b)} · 스마트폰 완충 약 ${ph(a)}~${ph(b)}번`; })()))));
+  const list=$('#list'); list.replaceChildren(); const bare=C.length-shown.length;
+  const sorted=[...shown].sort(sortBy==='easy'?(a,b)=>a.tries-b.tries||b.at-a.at:(a,b)=>b.at-a.at);
   $('#sortBox').replaceChildren(...(shown.length>1?[['easy','쉽게 건진 순'],['new','최근 순']].map(([k,l])=>{const b=el('button',{class:'tab',type:'button','aria-selected':String(sortBy===k)},l); b.onclick=()=>{sortBy=k;render();}; return b;}):[]));
   if(!C.length) list.append(el('p',{class:'empty'},'"쓸 만하다"를 누르고 프롬프트를 남기면 여기에 모입니다.'));
   else if(!shown.length) list.append(el('p',{class:'empty'},'건진 결과는 있지만 프롬프트를 남긴 것이 아직 없습니다. 아래에서 지금 남길 수 있습니다.'));
-  shown.forEach(c=>{ const cp=el('button',{class:'btn sm cp',type:'button'},'복사'); cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(c.p); cp.textContent='복사됨'; c.e.c=(c.e.c||0)+1; save(); }catch(e){ cp.textContent='복사 실패'; } setTimeout(()=>cp.textContent='복사',1500); };
-    list.append(el('div',{class:'it'},el('div',null,el('div',{class:'pt'},c.p),el('div',{class:'mt'},c.t+' · ',el('b',null,`${c.tries}번 만에 건짐`),c.price!=null?[' · 이 결과물에 ',el('b',null,won(c.price))]:null)),cp)); });
+  sorted.forEach(c=>list.append(promptItem(c)));
   if(bare){ const nb=C.filter(c=>!c.p).sort((a,b)=>b.at-a.at), det=el('details',{class:'later'},el('summary',null,`프롬프트 없이 건진 결과 ${bare}개 · 지금 남기기`));
-    nb.forEach(c=>{ const d=new Date(c.at), when=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`,
-      pi=el('input',{type:'text',maxlength:'400',placeholder:'이 결과에 쓴 프롬프트 (선택)','aria-label':`${c.t} ${when} 프롬프트`}), bt=el('button',{class:'btn sm',type:'button'},'남기기');
+    nb.forEach(c=>{ const when=hhmm(c.at), pi=el('input',{type:'text',maxlength:'400',placeholder:'이 결과에 쓴 프롬프트 (선택)','aria-label':`${c.t} ${when} 프롬프트`}), bt=el('button',{class:'btn sm',type:'button'},'남기기');
       bt.onclick=()=>{ const p=pi.value.trim(); if(!p){ pi.focus(); return; } c.e.p=p; save(); render(); };
       pi.addEventListener('keydown',e=>{ if(e.key==='Enter') bt.click(); });
       det.append(el('div',{class:'lrow'},el('div',{class:'mt'},`${c.t} · ${when} · ${c.tries}번 만에 건짐`),el('div',{class:'f'},pi,bt))); });
     det.open=laterOpen; det.addEventListener('toggle',()=>{ laterOpen=det.open; }); list.append(det); }
-  const t=toolName(), mine=monthLog().filter(x=>x.one&&x.t===t), show=mine.slice(-60), ty=$('#tally');
-  ty.replaceChildren(...show.map((x,i)=>el('span',{class:'mk'+(x.k?' ok':'')+(i===show.length-1&&mine.length>lastLen&&lastLen>=0?' new':''),title:x.k?'쓸 만하다':'못 쓰겠다'},x.k?'○':'✕')));
-  if(!show.length) ty.append(el('span',{class:'ph'},t?'누를 때마다 여기에 하나씩 쌓입니다.':'먼저 1번에서 AI를 골라 주세요.')); lastLen=mine.length;
-  const kk=mine.filter(x=>x.k).length; $('#sum').replaceChildren(el('span',null,'못 쓰겠다',el('b',null,mine.length-kk)),el('span',null,'쓸 만하다',el('b',null,kk)),el('span',null,'합계',el('b',null,mine.length)));
+  if($('#showSum').getAttribute('aria-expanded')==='true') fillSum();
   $('#demo').textContent=inDemo()?'내 기록으로 돌아가기':'예시 데이터로 보기'; $('#clear').hidden=inDemo();
 }
+function promptItem(c){ const cp=el('button',{class:'btn sm cp',type:'button'},'복사'); cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(c.p); cp.textContent='복사됨'; c.e.c=(c.e.c||0)+1; save(); }catch(e){ cp.textContent='복사 실패'; } setTimeout(()=>cp.textContent='복사',1500); };
+  return el('div',{class:'it'},el('div',null,el('div',{class:'pt'},c.p),el('div',{class:'mt'},c.t+' · ',el('b',null,`${c.tries}번 만에 건짐`),c.price!=null?[' · 이 결과물에 ',el('b',null,won(c.price))]:null)),cp); }
 function planLabel(r){ if(r.plan==='month'){ const {d,all}=dayInfo(); return `${r.planName?r.planName+' · ':''}월 ${won(r.cost)} · ${d}/${all}일치 반영`; } return r.plan==='per'?`1회 ${won(r.cost)}`:'무료·미입력'; }
-// 결과 요약 복사
+
+// ── 결과 요약
 function summaryText(){ const rows=getRows(); if(!rows.length) return ''; const n=new Date(), m=n.getMonth()+1;
   const L=[`Keepers for AI · ${n.getFullYear()}년 ${m}월 기록 요약 (${m}월 ${n.getDate()}일까지)`+(inDemo()?' · 예시 데이터':'')];
+  const sl=[...document.querySelectorAll('#sesV .sl')].map(p=>'- '+p.textContent);
+  if(sl.length) L.push('',`[이번 작업] ${st.ses?hhmm(st.ses)+'부터':''}`,...sl);
   const vl=[...document.querySelectorAll('#verdict .vl, #verdict .cav, #verdict .vs')].map(p=>'- '+p.textContent);
-  L.push('','[결론]',...(vl.length?vl:['- 아직 결론이 없습니다.']));
-  L.push('','[서비스별]',...rows.map(r=>`- ${r.t} (${planLabel(r)}): ${r.s.n}번 만들어 ${r.s.k}개 건짐`+(r.s.k?`, 평균 ${r1(r.s.n/r.s.k)}번 만에 하나`:'')+(r.per!=null?`, 결과물 하나에 ${won(r.per)}`:'')+(r.fee!=null?`, 이번 달 쓴 금액 ${won(r.fee)}`:', 쓴 금액 0원(무료·미입력)')+(r.keepSec!=null?`, 하나에 약 ${dur(r.keepSec)}`:'')+(()=>{ const [a,b]=whRange(r.t,r.s.n); return `, 전력 참고치 약 ${wh(a)}~${wh(b)}`; })()));
+  L.push('','[이번 달 결론]',...(vl.length?vl:['- 아직 결론이 없습니다.']));
+  L.push('','[서비스별]',...rows.map(r=>`- ${r.t} (${planLabel(r)}): ${r.s.n}번 만들어 ${r.s.k}개 건짐`+(r.s.k?`, 평균 ${r1(r.s.n/r.s.k)}번 만에 하나`:'')+(r.per!=null?`, 결과물 하나에 ${won(r.per)}`:'')+(r.fee!=null?`, 이번 달 쓴 금액 ${won(r.fee)}`:', 쓴 금액 0원(무료·미입력)')+(r.keepSec!=null?`, 하나에 약 ${dur(r.keepSec)}`:'')+(r.reasons.length?`, 못 쓴 이유: ${reasonText(r.reasons)}`:'')+(()=>{ const [a,b]=whRange(r.t,r.s.n); return `, 전력 참고치 약 ${wh(a)}~${wh(b)}`; })()));
   const C=cuts(), pr=C.filter(c=>c.p), cp=pr.reduce((a,c)=>a+(c.e.c||0),0);
   L.push('','[잘 먹힌 프롬프트]',`- 남긴 프롬프트 ${pr.length}개, 복사해서 다시 쓴 횟수 ${cp}번`);
   return L.join('\n'); }
-function fillSum(){ const txt=summaryText(); $('#sumText').textContent=txt||'아직 요약할 기록이 없습니다. 서비스를 고르고 결과마다 버튼을 눌러 보세요.'; $('#copySum').hidden=!txt; }
+function fillSum(){ const txt=summaryText(); $('#sumText').textContent=txt||'아직 요약할 기록이 없습니다.'; $('#copySum').hidden=!txt; }
 function closeSum(){ $('#sumBox').hidden=true; $('#showSum').setAttribute('aria-expanded','false'); $('#showSum').textContent='결과 요약 보기'; }
-$('#showSum').onclick=()=>{ const open=$('#showSum').getAttribute('aria-expanded')==='true';
-  if(open){ closeSum(); return; }
-  $('#sumMsg').textContent=''; $('#sumOut').hidden=true; fillSum(); $('#sumBox').hidden=false; $('#showSum').setAttribute('aria-expanded','true'); $('#showSum').textContent='결과 요약 닫기'; };
+$('#showSum').onclick=()=>{ if($('#showSum').getAttribute('aria-expanded')==='true'){ closeSum(); return; }
+  $('#sumMsg').textContent=''; $('#sumOut').hidden=true; $('#sumBox').hidden=false; $('#showSum').setAttribute('aria-expanded','true'); $('#showSum').textContent='결과 요약 닫기'; fillSum(); };
 $('#copySum').onclick=async()=>{ const txt=summaryText(), m=$('#sumMsg'), o=$('#sumOut'); o.hidden=true; if(!txt) return;
   try{ await navigator.clipboard.writeText(txt); m.textContent='복사했습니다. 메모나 메신저에 붙여 넣으세요.'; }
   catch(e){ o.value=txt; o.hidden=false; o.focus(); o.select(); m.textContent='자동 복사가 막혀 있습니다. 아래 글을 직접 복사해 주세요.'; } };
-// 예시 데이터: 내 기록을 건드리지 않고 보기만 한다
-function exitDemo(){ if(!inDemo()) return; st=real; real=null; $('#got').hidden=true; lastLen=-1; }
-$('#demo').onclick=()=>{ $('#sumMsg').textContent=''; $('#sumOut').hidden=true;
-  if(inDemo()){ exitDemo(); render(); return; }
-  const now=Date.now(), PR=['비 오는 창가의 고양이, 수채화 스타일','안개 낀 숲길을 걷는 사람, 필름 사진 느낌','노을 지는 바다 위의 작은 배, 유화','neon city street at night, cinematic lighting','눈 덮인 산장의 굴뚝 연기','한복을 입은 여성의 초상화, 부드러운 자연광']; let pi=0,ti=0,ki=0;
-  let clock=now-110*60000; const seq=(t,s)=>[...s].map((c,i)=>{ clock+=i?30000+((ti++*37)%80)*1000:120000; const e={t,n:1,k:c==='o'?1:0,at:Math.min(clock,now),one:true}; if(e.k&&ki++%3===0&&pi<PR.length) e.p=PR[pi++]; return e; });
+
+// ── 예시 데이터: 내 기록을 건드리지 않고 보기만 한다
+function exitDemo(){ if(!inDemo()) return; st=real; real=null; $('#got').hidden=true; $('#why').hidden=true; lastLen=-1; }
+function enterDemo(){ if(inDemo()) return; const now=Date.now(), PR=['비 오는 창가의 고양이, 수채화 스타일','안개 낀 숲길을 걷는 사람, 필름 사진 느낌','노을 지는 바다 위의 작은 배, 유화','neon city street at night, cinematic lighting','눈 덮인 산장의 굴뚝 연기','한복을 입은 여성의 초상화, 부드러운 자연광'], RS=['text','hand','comp','mood','text','detail','text','comp'];
+  let pi=0,ti=0,ki=0,ri=0, clock=now-110*60000, sesStart=0;
+  const seq=(t,s,mark)=>[...s].map((c,i)=>{ clock+=i?30000+((ti++*37)%80)*1000:120000; if(mark&&!i) sesStart=clock; const e={t,n:1,k:c==='o'?1:0,at:Math.min(clock,now),one:true};
+    if(e.k&&ki++%3===0&&pi<PR.length) e.p=PR[pi++]; if(!e.k&&(ti%2)) e.r=RS[ri++%RS.length]; return e; });
   real=st; st={tools:{'서비스 A (예시)':{plan:'month',cost:15000},'서비스 B (예시)':{plan:'per',cost:150},'영상 서비스 C (예시)':{plan:'per',cost:1500},'서비스 D (예시)':{plan:'free',cost:0}},
-    log:[...seq('서비스 A (예시)','xxxoxxxxoxxoxxxxxoxxxoxo'),...seq('서비스 B (예시)','xoxxoxoxxoxxoxoxxoxoxxoxxoxoxo'),...seq('영상 서비스 C (예시)','xxxxoxxxxxxo'),...seq('서비스 D (예시)','xxox')]};
-  $('#got').hidden=true; render(); };
+    log:[...seq('서비스 A (예시)','xxxoxxxxoxxoxxxxxoxxxoxo'),...seq('영상 서비스 C (예시)','xxxxoxxxxxxo'),...seq('서비스 D (예시)','xxox'),...seq('서비스 B (예시)','xoxxoxoxxoxxoxoxxoxoxxoxxoxoxo',true)]};
+  st.ses=sesStart; $('#got').hidden=true; $('#why').hidden=true; }
+$('#demo').onclick=()=>{ $('#sumMsg').textContent=''; $('#sumOut').hidden=true; if(inDemo()) exitDemo(); else enterDemo(); render(); };
 $('#clear').onclick=()=>{ const b=$('#clear');
   if(!clearArmed){ b.textContent='정말 지울까요? 한 번 더 누르세요'; clearArmed=setTimeout(()=>{ clearArmed=null; b.textContent='모두 지우기'; },4000); return; }
-  clearTimeout(clearArmed); clearArmed=null; b.textContent='모두 지우기'; st={tools:{},log:[]}; $('#got').hidden=true; save(); render(); };
+  clearTimeout(clearArmed); clearArmed=null; b.textContent='모두 지우기'; st={tools:{},log:[]}; $('#got').hidden=true; $('#why').hidden=true; save(); render(); };
+
+// ── 시작
 fillPlans();
-render();
+if(st.cur&&st.cur.sel){ sel.value=st.cur.sel; $('#custom').value=st.cur.custom||''; $('#custom').hidden=sel.value!=='__custom'; fillPlans(); loadPlan(); }
+setOpen(!toolName());
+const first=location.hash.slice(1)||(st.log.length?'work':'home');
+history.replaceState(null,'','#'+first); apply(first);
 </script>
 </body>
 </html>
